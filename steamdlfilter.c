@@ -36,18 +36,33 @@ ssize_t send(int sockfd, const void *buf, size_t len, int flags) {
 	  FILE *logfp;
 	  char *logmode = "a+";
 
-	  const char * unmeteredserver;
-	  const char * serverpath = "unmeteredserver";
-
-	  config_lookup_string(&config, serverpath, &unmeteredserver);
-
 	  int logging;
 	  const char * logconfigpath = "logging";
 
 	  config_lookup_bool(&config, logconfigpath, &logging);
 
+	  const char * unmeteredserver;
+	  const char * serverpath = "unmeteredservers";
 
-	  if (strstr(cbuf, unmeteredserver)) {	  
+      const int nServers = config_setting_length( config_lookup(&config, serverpath) );
+
+      /* Loop over all servers in config and check for any matches */
+      int allowedserver = 0;
+      for(int i=0; i < nServers; i++) {
+          /* Lookup path is serverpath.[i] */
+          int indexlength = 0;
+          if (i!=0) indexlength = floor( log10( abs(x))) + 1;
+          char * servername = malloc(strlen(serverpath) + indexlength + 3 + 1); /* 3 for ".[]" and 1 for null termination */
+          strcpy(servername, serverpath);
+          strcat(servername, sprintf(".[%d]", i));
+          config_lookup_string(&config, servername, &unmeteredserver); 
+          if(strstr(cbuf, unmeteredserver)) {
+              allowedserver = 1;
+              break;
+          }
+      }
+
+	  if (allowedserver) {	  
 		  if (logging == 1) {
 		  	logfp = fopen(logpath, logmode);
                   	fprintf(logfp, "=======ALLOWED=======\n%s\n", cbuf);
