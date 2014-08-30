@@ -1,10 +1,8 @@
 #Steamdlfilter
 
-Steamdlfilter is a collection of a library, config utility and bash script that limits steam to downloading games only from your ISP's "unmetered" server/s.
-It is similar in functionality (but more simple and with less polish, for now) to steamlimiter, which does much the same thing on windows.
+Steamdlfilter - ensure steam only downloads from your ISP's unmetered content server.
 
-Steamdlfilter is a simple shared library, and a configuration utility, and a script to launch steam (the linux port of steam, *not* steam for windows via WINE), with this library preloaded. The purpose of steamdlfilter is to restrict steam to downloading from "unmetered" content servers, if your ISP has them.  
-
+Steamdlfilter is a collection of 3 things, a library (steamdlfilter.so, see compiling 2.), a graphical configuration utility to disable and enable the filter easily (and more soon), and a simple launcher script that launches steam with the filter attached.
 
 The library wraps the send(2) function, which among other things, steam uses to request chunks of games to download from various steam servers. It simply checks if the chunk is being requested from your chosen server, and only allows the connection if so.
 
@@ -15,7 +13,13 @@ The configuration utility is a tiny gtk3 program that so far only has a toggle b
 
 ####Dependencies
 
-32-bit libconfig and gtk3 should be all you need.
+64-bit systems will need to have both 32 and 64-bit libconfig and libconfig-dev/devel installed.
+
+gtk3, glibc-devel/linux-glibc-devel are also required.
+
+Note, the only things you *need* to compile and install are the library (steamdlfilter.so, see the second part of compiling) and its dependencies.
+
+The config utility is optional, it simply provides an easy way to toggle the filter on or off (which works while steam is running and takes effect quickly in every test so far).
 
 ####Compiling
 
@@ -25,6 +29,6 @@ The configuration utility is a tiny gtk3 program that so far only has a toggle b
 ####Misc
 
 1.  Copy `config` to `$HOME/.config/steamdlfilter/` and modify the unmetered server value and the `logging` value to your liking
-2. To launch: `DEBUGGER="env LD_PRELOAD=/path/to/steamdlfilter/steamdlfilter.so" LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib steam`
+2. To launch: `DEBUGGER="env LD_PRELOAD=/path/to/steamdlfilter/steamdlfilter.so" LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib steam` or alternatively use the included script. steamdlfilter.sh which will look for the library in the current directory
 
 Note: In my testing, I succesfully downloaded an update for Prison Architect, and all of Dota 2, and had 0 data leakage, however I make NO guarantees whatsoever that this will work properly for you. Your mileage may vary.
