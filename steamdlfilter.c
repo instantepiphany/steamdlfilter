@@ -48,13 +48,17 @@ ssize_t send(int sockfd, const void *buf, size_t len, int flags) {
 
       /* Loop over all servers in config and check for any matches */
       int allowedserver = 0;
-      for(int i=0; i < nServers; i++) {
+      int i;
+      for(i=0; i < nServers; i++) {
           /* Lookup path is serverpath.[i] */
           int indexlength = 0;
-          if (i!=0) indexlength = floor( log10( abs(x))) + 1;
+          if (i!=0) indexlength = floor( log10( abs(i))) + 1;
           char * servername = malloc(strlen(serverpath) + indexlength + 3 + 1); /* 3 for ".[]" and 1 for null termination */
           strcpy(servername, serverpath);
-          strcat(servername, sprintf(".[%d]", i));
+          char * indexstr = malloc(indexlength + 3 + 1);
+          char * tempformat = ".[%d]";
+          sprintf(indexstr, tempformat, i);
+          servername = strcat(servername, indexstr);
           config_lookup_string(&config, servername, &unmeteredserver); 
           if(strstr(cbuf, unmeteredserver)) {
               allowedserver = 1;
