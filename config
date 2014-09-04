@@ -1,0 +1,3 @@
+unmeteredserver = "steam.content.bigpondgames.com";
+logging = true;
+filterenabled = true;

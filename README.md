@@ -17,6 +17,13 @@ The configuration utility is a tiny gtk3 program that so far only has a toggle b
 
 gtk3, glibc-devel/linux-glibc-devel are also required.
 
+Compiling libconfig on a 32-bit machine:
+Just download libconfig, run `./configure --disable-cxx`.
+If you get an error saying that there is no ./configure, run `autoconf` first.
+
+Compiling libconfig on a 64-bit machine:
+Follow the 32-bit instructions, except add the -m32 CFLAG, like this `./configure CFLAGS=m32 --disable-cxx`
+
 Note, the only things you *need* to compile and install are the library (steamdlfilter.so, see the second part of compiling) and its dependencies.
 
 The config utility is optional, it simply provides an easy way to toggle the filter on or off (which works while steam is running and takes effect quickly in every test so far).

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 #include <stdio.h>
+#include <math.h>
 
 ssize_t send(int sockfd, const void *buf, size_t len, int flags) {
 
